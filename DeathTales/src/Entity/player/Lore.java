@@ -46,10 +46,10 @@ public class Lore {
 
 
 	private static final String[] cart3 = {
+		"I feel I'm getting closer... ",
 		"",
-		"",
-		"",
-		"",
+		"I should hurry.. The forest suffers.",
+		"I suffer ...",
 		"",
 		"",
 		"",

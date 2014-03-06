@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import Entity.enemies.Demon;
 import Entity.enemies.Skull;
+import Entity.objects.GameCards;
 import Entity.objects.Hearts;
 import Entity.objects.PowerUp;
 import TileMap.Background;
@@ -20,6 +21,7 @@ public class Level3State extends WorldState {
 	Skull skl;
 	Hearts hrt;
 	PowerUp stache;
+	GameCards crd;
 
 	public Level3State(GameStateManager gsm) {
 		super(gsm);
@@ -32,6 +34,7 @@ public class Level3State extends WorldState {
 				new Point(3000, 500), new Point(4100, 70), new Point(1700, 100),
 				new Point(1500, 200)};
 		hp = new Point[] { new Point(1600, 400) };
+		
 		pu = new Point[] { new Point(2200, 300), new Point(1540, 400) };
 	}
 
@@ -89,6 +92,10 @@ public class Level3State extends WorldState {
 				stache.setPosition(pu[i].x, pu[i].y);
 				exp.add(stache);
 			}
+
+		crd = new GameCards(tileMap, 1);
+		crd.setPosition(200, 150);
+		cards.add(crd);
 	}
 
 	@Override

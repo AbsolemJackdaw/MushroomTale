@@ -3,7 +3,6 @@ package GameState;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -288,17 +287,8 @@ public class WorldState extends GameState {
 		hud.draw(g);
 
 		if(loreToDisplay.length > 0){
-
 			displayLoreGui(g);
 		}
-
-		if(drawBoxes){
-//			Rectangle r = player.getRectangle();
-			g.setColor(Color.WHITE);
-			g.drawRect(player.getx(), player.gety(),30,30);
-//			g.draw(r);
-		}
-		//		
 
 	}
 
