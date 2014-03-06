@@ -8,9 +8,9 @@ import Entity.Enemy;
 import TileMap.TileMap;
 import content.Images;
 
-public class Demon extends Enemy{
+public class Demon extends Enemy {
 
-	private BufferedImage [] sprites;
+	private final BufferedImage[] sprites;
 
 	public Demon(TileMap tm) {
 		super(tm);
@@ -25,7 +25,7 @@ public class Demon extends Enemy{
 		height = 30;
 		cwidth = 20;
 		cheight = 20;
-		//load sprites
+		// load sprites
 
 		sprites = Images.Demon;
 
@@ -37,22 +37,24 @@ public class Demon extends Enemy{
 		facingRight = false;
 	}
 
-	public void update(){
-		super.update();
-	}
-
-	public void draw(Graphics2D g){
+	@Override
+	public void draw(Graphics2D g) {
 		super.draw(g);
 	}
-	
+
+	@Override
+	public int getExpChance() {
+		return 60;
+	}
+
 	@Override
 	public int getHeartChance() {
 		// TODO Auto-generated method stub
 		return 50;
 	}
-	
+
 	@Override
-	public int getExpChance() {
-		return 60;
+	public void update() {
+		super.update();
 	}
 }

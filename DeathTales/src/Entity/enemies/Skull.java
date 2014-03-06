@@ -3,15 +3,14 @@ package Entity.enemies;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import content.Images;
-
 import Entity.Animation;
 import Entity.Enemy;
 import TileMap.TileMap;
+import content.Images;
 
 public class Skull extends Enemy {
 
-	private BufferedImage[] sprites;
+	private final BufferedImage[] sprites;
 
 	public Skull(TileMap tm) {
 		super(tm);
@@ -40,18 +39,23 @@ public class Skull extends Enemy {
 	}
 
 	@Override
+	public void draw(Graphics2D g) {
+		super.draw(g);
+	}
+
+	@Override
 	public int getDamageAmount() {
 		return 2;
 	}
 
 	@Override
-	public void update() {
-		super.update();
+	public int getExpAmount() {
+		return 2;
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
-		super.draw(g);
+	public int getExpChance() {
+		return 50;
 	}
 
 	@Override
@@ -60,12 +64,7 @@ public class Skull extends Enemy {
 	}
 
 	@Override
-	public int getExpChance() {
-		return 50;
-	}
-	
-	@Override
-	public int getExpAmount() {
-		return 2;
+	public void update() {
+		super.update();
 	}
 }

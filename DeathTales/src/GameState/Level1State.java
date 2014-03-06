@@ -7,13 +7,14 @@ import Entity.objects.GameCards;
 import Entity.objects.Hearts;
 import Entity.objects.PowerUp;
 import TileMap.Background;
+import content.Music;
 
 public class Level1State extends WorldState {
 	// populating the map
-	private Point[] dms;
-	private Point[] hp;
-	private Point[] pu;
-	private Point[] c;
+	private final Point[] dms;
+	private final Point[] hp;
+	private final Point[] pu;
+	private final Point[] c;
 
 	Demon demon;
 	Hearts hrt;
@@ -27,27 +28,16 @@ public class Level1State extends WorldState {
 				new Point(1800, 80) };
 		hp = new Point[] { new Point(1420, 130) };
 
-		//		pu = new Point[] { new Point(200, 200),new Point(250, 200),new Point(250, 200),};
-		pu = new Point[] { new Point(1480 , 200) };
+		// pu = new Point[] { new Point(200, 200),new Point(250, 200),new
+		// Point(250, 200),};
+		pu = new Point[] { new Point(1480, 200) };
 
-		c = new Point[] { new Point( 200, 200) } ;
-		
+		c = new Point[] { new Point(200, 200) };
+
 		populateMap();
-//		Music.load("/Music/track_1.mp3", "BackgroundMusic");
-//		Music.play("BackgroundMusic");
+		Music.load("/Music/track_1.mp3", "BackgroundMusic");
+		Music.loop("BackgroundMusic");
 
-	}
-
-	@Override
-	public void init() {
-		super.init();
-	
-	}
-
-	@Override
-	protected void setPlayerPosition() {
-		player.setPosition(100, 150);
-		player.setWorld(this);
 	}
 
 	@Override
@@ -66,33 +56,39 @@ public class Level1State extends WorldState {
 	public void populateMap() {
 
 		if (dms != null)
-			for (int i = 0; i < dms.length; i++) {
+			for (final Point dm : dms) {
 				demon = new Demon(tileMap);
-				demon.setPosition(dms[i].x, dms[i].y);
+				demon.setPosition(dm.x, dm.y);
 				enemies.add(demon);
 			}
 
 		if (hp != null)
-			for (int i = 0; i < hp.length; i++) {
+			for (final Point element : hp) {
 				hrt = new Hearts(tileMap);
-				hrt.setPosition(hp[i].x, hp[i].y);
+				hrt.setPosition(element.x, element.y);
 				hearts.add(hrt);
 			}
 
-		if(pu != null)
-			for(int i = 0; i < pu.length; i++){
+		if (pu != null)
+			for (final Point element : pu) {
 				stache = new PowerUp(tileMap);
-				stache.setPosition(pu[i].x, pu[i].y);
+				stache.setPosition(element.x, element.y);
 				exp.add(stache);
 			}
 
-		if(c != null)
-			for(int i = 0; i < c.length; i ++){
+		if (c != null)
+			for (final Point element : c) {
 				crd = new GameCards(tileMap, 0);
-				crd.setPosition(c[i].x, c[i].y);
+				crd.setPosition(element.x, element.y);
 				cards.add(crd);
 			}
 
+	}
+
+	@Override
+	protected void setPlayerPosition() {
+		player.setPosition(100, 150);
+		player.setWorld(this);
 	}
 
 	@Override

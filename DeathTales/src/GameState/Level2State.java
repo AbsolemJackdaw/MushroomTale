@@ -1,5 +1,6 @@
 package GameState;
 
+import java.awt.Graphics2D;
 import java.awt.Point;
 
 import Entity.enemies.Demon;
@@ -11,9 +12,9 @@ import TileMap.Background;
 public class Level2State extends WorldState {
 
 	// populating the map
-	private Point[] dms;
-	private Point[] hp;
-	private Point[] pu;
+	private final Point[] dms;
+	private final Point[] hp;
+	private final Point[] pu;
 
 	Demon demon;
 	Hearts hrt;
@@ -22,29 +23,24 @@ public class Level2State extends WorldState {
 
 	public Level2State(GameStateManager gsm) {
 		super(gsm);
-		dms = new Point[] { new Point(830, 80),
-				new Point(1100, 200), new Point(1850, 200),
-				new Point(2000, 80), new Point(2000, 200),
-				new Point(2100, 200), new Point(2700, 200),
-				new Point(2800, 200), new Point(2900, 200) };
+
+		dms = new Point[] { new Point(830, 80), new Point(1100, 200),
+				new Point(1850, 200), new Point(2000, 80),
+				new Point(2000, 200), new Point(2100, 200),
+				new Point(2700, 200), new Point(2800, 200),
+				new Point(2900, 200) };
 
 		hp = new Point[] { new Point(760, 50), new Point(1350, 170) };
 
 		pu = new Point[] { new Point(1000, 50) };
 
-	}
-
-	@Override
-	public void init() {
-		super.init();
+		populateMap();
 
 	}
 
 	@Override
-	protected void setPlayerPosition() {
-		player.setPosition(45, 100);
-		player.setWorld(this); // used to detect tiles to teleport
-
+	public void draw(Graphics2D g) {
+		super.draw(g);
 	}
 
 	@Override
@@ -63,29 +59,40 @@ public class Level2State extends WorldState {
 	public void populateMap() {
 
 		if (dms != null)
-			for (int i = 0; i < dms.length; i++) {
+			for (final Point dm : dms) {
 				demon = new Demon(tileMap);
-				demon.setPosition(dms[i].x, dms[i].y);
+				demon.setPosition(dm.x, dm.y);
 				enemies.add(demon);
 			}
 
 		if (hp != null)
-			for (int i = 0; i < hp.length; i++) {
+			for (final Point element : hp) {
 				hrt = new Hearts(tileMap);
-				hrt.setPosition(hp[i].x, hp[i].y);
+				hrt.setPosition(element.x, element.y);
 				hearts.add(hrt);
 			}
 
 		if (pu != null)
-			for (int i = 0; i < pu.length; i++) {
+			for (final Point element : pu) {
 				stache = new PowerUp(tileMap);
-				stache.setPosition(pu[i].x, pu[i].y);
+				stache.setPosition(element.x, element.y);
 				exp.add(stache);
 			}
-
 
 		crd = new GameCards(tileMap, 1);
 		crd.setPosition(200, 150);
 		cards.add(crd);
+	}
+
+	@Override
+	protected void setPlayerPosition() {
+		player.setPosition(45, 100);
+		player.setWorld(this); // used to detect tiles to teleport
+
+	}
+
+	@Override
+	public void update() {
+		super.update();
 	}
 }

@@ -32,7 +32,7 @@ public class Player extends MapObject {
 
 	private int expStub;
 
-	private ArrayList<FumeBall> fumeBalls;
+	private final ArrayList<FumeBall> fumeBalls;
 
 	private boolean attacking;
 	private int attackDamage;
@@ -86,20 +86,20 @@ public class Player extends MapObject {
 		// load sprites
 		try {
 
-			BufferedImage spritesheet = ImageIO.read(getClass()
+			final BufferedImage spritesheet = ImageIO.read(getClass()
 					.getResourceAsStream("/player/playerSheet.png"));
 
 			sprites = new ArrayList<BufferedImage[]>();
 			for (int i = 0; i < numFrames.length; i++) {
 
-				BufferedImage[] bi = new BufferedImage[numFrames[i]];
+				final BufferedImage[] bi = new BufferedImage[numFrames[i]];
 
 				for (int j = 0; j < numFrames[i]; j++)
 					bi[j] = spritesheet.getSubimage(j * width, i * height,
 							width, height);
 				sprites.add(bi);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
@@ -109,21 +109,147 @@ public class Player extends MapObject {
 		animation.setDelay(100);
 	}
 
+	public void checkAttack(ArrayList<Enemy> enemies) {
+
+		for (int j = 0; j < enemies.size(); j++) {
+			final Enemy e = enemies.get(j);
+
+			for (int i = 0; i < fumeBalls.size(); i++)
+				if (fumeBalls.get(i).intersects(e)) {
+					e.hit(attackDamage);
+					fumeBalls.get(i).setHit();
+					break;
+				}
+
+			if (intersects(e))
+				damagePlayer(e.getDamageAmount());
+		}
+	}
+
+	public void checkObjects(ArrayList<Hearts> hearts, ArrayList<PowerUp> pu) {
+
+		for (int i = 0; i < hearts.size(); i++) {
+			final Hearts hrt = hearts.get(i);
+
+			if (intersects(hrt) && (health < maxHealth)) {
+				hrt.pickUpObject();
+				health += 1;
+			}
+		}
+
+		for (int i = 0; i < pu.size(); i++) {
+			final PowerUp p = pu.get(i);
+
+			if (intersects(p)) {
+				p.pickUpObject();
+				moustaches += 1;
+				expStub++;
+			}
+		}
+	}
+
+	@Override
+	public void checkTileMapCollision() {
+
+		super.checkTileMapCollision();
+
+		if ((currCol < tileMap.getNumCols())
+				&& (currRow < tileMap.getNumRows()))
+			if (tileMap.isDangerTile(currCol, currRow) && !flinching)
+				tileHurtsPlayer = true;
+		// System.out.println("auw");
+
+		if ((currCol < tileMap.getNumCols())
+				&& (currRow < tileMap.getNumRows()))
+			if (tileMap.canTeleport(getWorld(), currCol, currRow))
+				getWorld().gsm.setState(getWorld().gsm.getCurrentState() + 1);
+	}
+
+	public void damagePlayer(int damage) {
+		if (flinching)
+			return;
+		health -= damage;
+		if (health < 0)
+			health = 0;
+		if (health == 0)
+			dead = true;
+		flinching = true;
+		flinchTimer = System.nanoTime();
+	}
+
+	@Override
+	public void draw(Graphics2D g) {
+
+		// draw player
+		if (flinching) {
+			final long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
+			if (((elapsed / 100) % 2) == 0)
+				return;
+		}
+
+		for (int i = 0; i < fumeBalls.size(); i++)
+			fumeBalls.get(i).draw(g);
+
+		super.draw(g);
+	}
+
+	public int expLeftOver() {
+		int k = 0;
+
+		if (levels == 0)
+			k = 2;
+		else
+			k = levelUps[getLvl()] - levelUps[getLvl() - 1];
+
+		return k;
+	}
+
+	public int expToNextLevel() {
+
+		int c = 0;
+		for (int i = 0; i < levelUps.length; i++) {
+
+			c = levelUps[getLvl()] - moustaches;
+
+			if ((i + 1) > getLvl())
+				break;
+		}
+
+		return c;
+	}
+
+	/** Updates level, jump and speed */
+	private void gainLevel() {
+
+		if (levels < levelUps.length)
+			if (expStub >= expLeftOver()) {
+				moveSpeed += 0.9f;
+				maxSpeed += 0.11f;
+				fallSpeed -= 0.015;
+				expStub = expStub - expLeftOver();
+				maxHealth++;
+				levels++;
+			}
+	}
+
+	public int getExp() {
+		return moustaches;
+	}
+
+	public int getExpStub() {
+		return expStub;
+	}
+
 	public int getHealth() {
 		return health;
 	}
 
+	public int getLvl() {
+		return levels;
+	}
+
 	public int getMaxHealth() {
 		return maxHealth;
-	}
-
-	public void setAttacking() {
-		attacking = true;
-	}
-
-	@Override
-	public void setJumping(boolean b) {
-		jumping = b;
 	}
 
 	@Override
@@ -164,7 +290,7 @@ public class Player extends MapObject {
 
 			if (dy > 0)
 				jumping = false;
-			if (dy < 0 && !jumping)
+			if ((dy < 0) && !jumping)
 				dy += stopJumpSpeed;
 
 			if (dy > maxFallSpeed)
@@ -174,6 +300,51 @@ public class Player extends MapObject {
 
 	}
 
+	public boolean isDead() {
+		return dead;
+	}
+
+	public void setAttacking() {
+		attacking = true;
+	}
+
+	public void setDead(boolean b) {
+		dead = b;
+	}
+
+	public void setExpStub(int i) {
+		expStub = i;
+	}
+
+	public void setFallSpeed(double d) {
+		fallSpeed = d;
+	}
+
+	public void setHealth(int i) {
+		health = i;
+	}
+
+	@Override
+	public void setJumping(boolean b) {
+		jumping = b;
+	}
+
+	public void setLevels(int i) {
+		levels = i;
+	}
+
+	public void setMaxHealth(int i) {
+		maxHealth = i;
+	}
+
+	public void setMaxSpeed(double d) {
+		maxSpeed = d;
+	}
+
+	public void setStaches(int i) {
+		moustaches = i;
+	}
+
 	public void update() {
 
 		// update position
@@ -181,9 +352,9 @@ public class Player extends MapObject {
 		checkTileMapCollision();
 		setPosition(xtemp, ytemp);
 
-		//update attack damage
-		attackDamage = 1 + (levels/2);
-		//TODO put attack damage into the PlayerAttributes
+		// update attack damage
+		attackDamage = 1 + (levels / 2);
+		// TODO put attack damage into the PlayerAttributes
 
 		// check attack to stop
 		if (currentAction == ATTACKING)
@@ -192,21 +363,21 @@ public class Player extends MapObject {
 
 		// fumeball attack
 
-		if (attacking && currentAction != ATTACKING) {
-			FumeBall fb = new FumeBall(tileMap, facingRight);
+		if (attacking && (currentAction != ATTACKING)) {
+			final FumeBall fb = new FumeBall(tileMap, facingRight);
 			fb.setPosition(x, y);
 			fumeBalls.add(fb);
 		}
 
 		// check done flinching
 		if (flinching) {
-			long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
+			final long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
 			if (elapsed > 1200)
 				flinching = false;
 		}
 
 		// update for tiles hurting player
-		if (!flinching && this.tileHurtsPlayer) {
+		if (!flinching && tileHurtsPlayer) {
 			damagePlayer(1);
 			tileHurtsPlayer = false;
 		}
@@ -266,205 +437,17 @@ public class Player extends MapObject {
 				facingRight = false;
 		}
 
-		//		if(moustaches == levelUps[levels])
+		// if(moustaches == levelUps[levels])
 		gainLevel();
 
+		// has to be the very last to update everything correctly to the save
+		if (!dead)
+			writePlayerToUniverse();
 
-		////needs to come AFTER level gaining !!
-		//if(expStub > expLeftOver()){
-		//expStub = expLeftOver();
-		//}
-
-
-
-
-		// update maxHealth
-		//if (maxHealth < levels + 3)
-
-
-		//has to be the very last to update everything correctly to the save
-		writePlayerToUniverse();
-
-	}
-
-	/** Updates level, jump and speed */
-	private void gainLevel() {
-
-		//System.out.println("(exp to next level "+expToNextLevel() + ") + (expCollectedThisLevel " + expStub + ")= (exp needed to level " + expLeftOver() + "). Total exp earned : " + getExp());
-		//System.out.println(levels);
-
-		if (levels < levelUps.length){
-			if (expStub >= expLeftOver()){
-				moveSpeed += 0.9f;
-				maxSpeed += 0.11f;
-				fallSpeed -= 0.015;
-				expStub = expStub - expLeftOver();
-				maxHealth++;
-				levels++;
-			}
-		}
-	}
-
-	@Override
-	public void draw(Graphics2D g) {
-
-		// setMapPosition();
-
-		// draw player
-		if (flinching) {
-			long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
-			if (elapsed / 100 % 2 == 0)
-				return;
-		}
-
-		for (int i = 0; i < fumeBalls.size(); i++)
-			fumeBalls.get(i).draw(g);
-
-		super.draw(g);
-
-	}
-
-	public void checkAttack(ArrayList<Enemy> enemies) {
-
-		for (int j = 0; j < enemies.size(); j++) {
-			Enemy e = enemies.get(j);
-
-			for (int i = 0; i < fumeBalls.size(); i++)
-				if (fumeBalls.get(i).intersects(e)) {
-					e.hit(attackDamage);
-					fumeBalls.get(i).setHit();
-					break;
-				}
-
-			if (intersects(e))
-				damagePlayer(e.getDamageAmount());
-		}
-	}
-
-	public void damagePlayer(int damage) {
-		if (flinching)
-			return;
-		health -= damage;
-		if (health < 0)
-			health = 0;
-		if (health == 0)
-			dead = true;
-		flinching = true;
-		flinchTimer = System.nanoTime();
-	}
-
-	@Override
-	public void checkTileMapCollision() {
-
-		super.checkTileMapCollision();
-
-		if (currCol < tileMap.getNumCols() && currRow < tileMap.getNumRows())
-			if (tileMap.isDangerTile(currCol, currRow) && !flinching)
-				tileHurtsPlayer = true;
-		// System.out.println("auw");
-
-		if (currCol < tileMap.getNumCols() && currRow < tileMap.getNumRows())
-			if (tileMap.canTeleport(getWorld(), currCol, currRow))
-				if (getWorld().gsm.getCurrentState() < getWorld().gsm.maxLevels)
-					getWorld().gsm.setState(getWorld().gsm.getCurrentState() + 1);
 	}
 
 	private void writePlayerToUniverse() {
-		PlayerAttributes.setAttributes(health, maxHealth, moustaches, levels, expStub, maxSpeed, fallSpeed);
-	}
-
-	public void setHealth(int i) {
-		health = i;
-	}
-
-	public void setMaxHealth(int i) {
-		maxHealth = i;
-	}
-
-	public void setLevels(int i) {
-		levels = i;
-	}
-
-	public void setStaches(int i) {
-		moustaches = i;
-	}
-
-	public void setExpStub(int i) {
-		expStub = i;
-	}
-
-	public void setMaxSpeed(double d){
-		maxSpeed = d;
-	}
-
-	public void setFallSpeed(double d){
-		fallSpeed = d;
-	}
-
-	public void checkObjects(ArrayList<Hearts> hearts, ArrayList<PowerUp> pu) {
-
-		for (int i = 0; i < hearts.size(); i++) {
-			Hearts hrt = hearts.get(i);
-
-			if (intersects(hrt) && health < maxHealth) {
-				hrt.pickUpObject();
-				health += 1;
-			}
-		}
-
-		for (int i = 0; i < pu.size(); i++) {
-			PowerUp p = pu.get(i);
-
-			if (intersects(p)) {
-				p.pickUpObject();
-				moustaches += 1;
-				expStub++;
-			}
-		}
-	}
-
-	public boolean isDead() {
-		return dead;
-	}
-
-	public void setDead(boolean b) {
-		dead = b;
-	}
-
-	public int getExp() {
-		return moustaches;
-	}
-
-	public int getLvl() {
-		return levels;
-	}
-
-	public int expToNextLevel() {
-
-		int c = 0;
-		for (int i = 0; i < levelUps.length; i++) {
-
-			c = levelUps[getLvl()] - moustaches;
-
-			if (i + 1 > getLvl())
-				break;
-		}
-
-		return c;
-	}
-
-	public int expLeftOver() {
-		int k = 0;
-
-		if (levels == 0)
-			k = 2;
-		else
-			k = levelUps[getLvl()] - levelUps[getLvl() - 1];
-
-		return k;
-	}
-
-	public int getExpStub() {
-		return expStub;
+		PlayerAttributes.setAttributes(health, maxHealth, moustaches, levels,
+				expStub, maxSpeed, fallSpeed);
 	}
 }

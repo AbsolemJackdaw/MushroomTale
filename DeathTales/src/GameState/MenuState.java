@@ -14,7 +14,7 @@ public class MenuState extends GameState {
 	private Background bg;
 
 	private int currentChoice = 0;
-	private String[] options = { "Start", "Help", "Quit" };
+	private final String[] options = { "Start", "Help", "Quit" };
 
 	private Color titleColor;
 	private Font titleFont;
@@ -35,14 +35,61 @@ public class MenuState extends GameState {
 
 			font = new Font("Arial", Font.PLAIN, 12);
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
 	}
 
 	@Override
+	public void draw(Graphics2D g) {
+
+		// draw bg
+		bg.draw(g);
+
+		// draw title
+
+		g.setColor(titleColor);
+		g.setFont(titleFont);
+		g.drawString("Mushroom Tale", 60, GamePanel.HEIGHT / 3);
+
+		final Color clr = new Color(0x9d300f);
+		// Draw menu square
+		final Rectangle rect = new Rectangle((GamePanel.WIDTH / 2) - 20,
+				127 + (currentChoice * 15), 35, 15);
+		g.setColor(clr);
+		g.draw(rect);
+
+		// draw menu options
+		g.setFont(font);
+		for (int i = 0; i < options.length; i++) {
+			if (i == currentChoice)
+				g.setColor(Color.BLACK);
+			else
+				g.setColor(Color.RED);
+			g.drawString(options[i], 145, 140 + (i * 15));
+		}
+
+	}
+
+	@Override
 	public void init() {
+	}
+
+	public void keyPressed(int k) {
+
+	}
+
+	public void keyReleased(int k) {
+	}
+
+	private void select() {
+		if (currentChoice == 0)
+			gsm.setState(GameStateManager.LEVEL1STATE);
+		if (currentChoice == 1)
+			gsm.setState(GameStateManager.HELP);
+		if (currentChoice == 2)
+			System.exit(0);
 	}
 
 	@Override
@@ -60,54 +107,6 @@ public class MenuState extends GameState {
 			if (currentChoice == options.length)
 				currentChoice = 0;
 		}
-	}
-
-	@Override
-	public void draw(Graphics2D g) {
-
-		// draw bg
-		bg.draw(g);
-
-		// draw title
-
-		g.setColor(titleColor);
-		g.setFont(titleFont);
-		g.drawString("Mushroom Tale", 60, GamePanel.HEIGHT / 3);
-
-		Color clr = new Color(0x9d300f);
-		// Draw menu square
-		Rectangle rect = new Rectangle(GamePanel.WIDTH / 2 - 20,
-				127 + currentChoice * 15, 35, 15);
-		g.setColor(clr);
-		g.draw(rect);
-
-		// draw menu options
-		g.setFont(font);
-		for (int i = 0; i < options.length; i++) {
-			if (i == currentChoice)
-				g.setColor(Color.BLACK);
-			else
-				g.setColor(Color.RED);
-			g.drawString(options[i], 145, 140 + i * 15);
-		}
-
-	}
-
-	private void select() {
-		if (currentChoice == 0)
-			gsm.setState(GameStateManager.LEVEL1STATE);
-		if (currentChoice == 1) {
-			// help
-		}
-		if (currentChoice == 2)
-			System.exit(0);
-	}
-
-	public void keyPressed(int k) {
-
-	}
-
-	public void keyReleased(int k) {
 	}
 
 }

@@ -1,6 +1,5 @@
 package Entity.player;
 
-
 public class PlayerAttributes {
 
 	private static int health = 3;
@@ -11,19 +10,20 @@ public class PlayerAttributes {
 	private static double maxSpeed = 1.0;
 	private static double fallSpeed = 0.15;
 
-	//TODO save position and map
+	// TODO save position and map
 
-	public static void setAttributes(int hp, int maxHp, int exp, int lvl, int stub, double maxSp, double fallSp){
+	public static void setAttributes(int hp, int maxHp, int exp, int lvl,
+			int stub, double maxSp, double fallSp) {
 		health = hp;
 		maxHealth = maxHp;
 		moustaches = exp;
-		levels = lvl;		
+		levels = lvl;
 		expStub = stub;
 		maxSpeed = maxSp;
 		fallSpeed = fallSp;
 	}
 
-	public static void setPlayerAttributes(Player p){
+	public static void setPlayerAttributes(Player p) {
 		p.setHealth(health);
 		p.setMaxHealth(maxHealth);
 		p.setExpStub(expStub);
@@ -31,7 +31,7 @@ public class PlayerAttributes {
 		p.setLevels(levels);
 		p.setMaxSpeed(maxSpeed);
 		p.setFallSpeed(fallSpeed);
-		
+
 	}
 
 }

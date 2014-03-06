@@ -3,9 +3,9 @@ package com.neet.Main;
 import javax.swing.JFrame;
 
 public class Game {
-	
+
 	public static void main(String[] args) {
-		JFrame window = new JFrame("Artifact");
+		final JFrame window = new JFrame("Artifact");
 		window.add(new GamePanel());
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
@@ -13,5 +13,5 @@ public class Game {
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 	}
-	
+
 }

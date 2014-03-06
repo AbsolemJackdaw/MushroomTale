@@ -14,31 +14,36 @@ public class KeyHandler {
 	public static int SPACE = 3;
 	public static int ENTER = 4;
 	public static int DOWN = 5;
-	
-	public static void keySet(int i, boolean b) {
-		if(i == KeyEvent.VK_UP) keyState[UP] = b;
-		else if(i == KeyEvent.VK_LEFT) keyState[LEFT] = b;
-		else if(i == KeyEvent.VK_RIGHT) keyState[RIGHT] = b;
-		else if(i == KeyEvent.VK_SPACE) keyState[SPACE] = b;
-		else if(i == KeyEvent.VK_ENTER) keyState[ENTER] = b;
-		else if(i == KeyEvent.VK_DOWN) keyState[DOWN] = b;
 
-	}
-
-	public static void update() {
-		for(int i = 0; i < NUM_KEYS; i++) {
-			prevKeyState[i] = keyState[i];
-		}
+	public static boolean anyKeyPress() {
+		for (int i = 0; i < NUM_KEYS; i++)
+			if (keyState[i])
+				return true;
+		return false;
 	}
 
 	public static boolean isPressed(int i) {
 		return keyState[i] && !prevKeyState[i];
 	}
 
-	public static boolean anyKeyPress() {
-		for(int i = 0; i < NUM_KEYS; i++) {
-			if(keyState[i]) return true;
-		}
-		return false;
+	public static void keySet(int i, boolean b) {
+		if (i == KeyEvent.VK_UP)
+			keyState[UP] = b;
+		else if (i == KeyEvent.VK_LEFT)
+			keyState[LEFT] = b;
+		else if (i == KeyEvent.VK_RIGHT)
+			keyState[RIGHT] = b;
+		else if (i == KeyEvent.VK_SPACE)
+			keyState[SPACE] = b;
+		else if (i == KeyEvent.VK_ENTER)
+			keyState[ENTER] = b;
+		else if (i == KeyEvent.VK_DOWN)
+			keyState[DOWN] = b;
+
+	}
+
+	public static void update() {
+		for (int i = 0; i < NUM_KEYS; i++)
+			prevKeyState[i] = keyState[i];
 	}
 }

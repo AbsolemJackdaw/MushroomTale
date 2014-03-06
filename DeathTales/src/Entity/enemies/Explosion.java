@@ -7,26 +7,24 @@ import Entity.Animation;
 import Entity.Enemy;
 import content.Images;
 
-
 public class Explosion {
 
-
-	private int x;
-	private int y;
+	private final int x;
+	private final int y;
 	private int xmap;
 	private int ymap;
 
-	private int width;
-	private int height;
+	private final int width;
+	private final int height;
 
-	private Animation animation;
-	private BufferedImage [] imgs;
+	private final Animation animation;
+	private final BufferedImage[] imgs;
 
 	private boolean remove;
 
-	private Enemy enemy;
+	private final Enemy enemy;
 
-	public Explosion ( int x, int y, Enemy e2){
+	public Explosion(int x, int y, Enemy e2) {
 
 		enemy = e2;
 
@@ -43,35 +41,38 @@ public class Explosion {
 		animation.setDelay(40);
 	}
 
-	public void update(){
-		animation.update();
-		if(animation.hasPlayedOnce()){
-			remove = true;
-		}
+	public void draw(Graphics2D g) {
+		g.drawImage(animation.getImage(), (x + xmap) - (width / 2), (y + ymap)
+				- (height / 2), null
+
+		);
 	}
 
-	public boolean shouldRemove(){ return remove; }
+	public Enemy getEnemy() {
+		return enemy;
+	}
 
-	public void setMapPosition(int x, int y){
+	public int getx() {
+		return x;
+	}
+
+	public int gety() {
+		return y;
+	}
+
+	public void setMapPosition(int x, int y) {
 		xmap = x;
 		ymap = y;
 	}
 
-	public void draw(Graphics2D g){
-		g.drawImage(
-				animation.getImage(),
-				x + xmap - width/2,
-				y + ymap - height/2,
-				null
-
-				);
+	public boolean shouldRemove() {
+		return remove;
 	}
 
-	public int getx(){return x;	}
-	public int gety() { return y; }
-
-	public Enemy getEnemy(){
-		return enemy;
+	public void update() {
+		animation.update();
+		if (animation.hasPlayedOnce())
+			remove = true;
 	}
 
 }

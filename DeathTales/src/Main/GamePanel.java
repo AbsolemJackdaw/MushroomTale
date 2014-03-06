@@ -23,8 +23,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	// game thread
 	private Thread thread;
 	private boolean running;
-	private int FPS = 60;
-	private long targetTime = 1000 / FPS;
+	private final int FPS = 60;
+	private final long targetTime = 1000 / FPS;
 
 	// image
 	private BufferedImage image;
@@ -50,6 +50,16 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		}
 	}
 
+	private void draw() {
+		gsm.draw(g);
+	}
+
+	private void drawToScreen() {
+		final Graphics g2 = getGraphics();
+		g2.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
+		g2.dispose();
+	}
+
 	private void init() {
 
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -59,6 +69,20 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 		gsm = new GameStateManager();
 
+	}
+
+	@Override
+	public void keyPressed(KeyEvent key) {
+		KeyHandler.keySet(key.getKeyCode(), true);
+	}
+
+	@Override
+	public void keyReleased(KeyEvent key) {
+		KeyHandler.keySet(key.getKeyCode(), false);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent key) {
 	}
 
 	@Override
@@ -81,13 +105,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 			elapsed = System.nanoTime() - start;
 
-			wait = targetTime - elapsed / 1000000;
+			wait = targetTime - (elapsed / 1000000);
 			if (wait < 0)
 				wait = 5;
 
 			try {
 				Thread.sleep(wait);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 
@@ -98,29 +122,5 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private void update() {
 		gsm.update();
 		KeyHandler.update();
-	}
-
-	private void draw() {
-		gsm.draw(g);
-	}
-
-	private void drawToScreen() {
-		Graphics g2 = getGraphics();
-		g2.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
-		g2.dispose();
-	}
-
-	@Override
-	public void keyTyped(KeyEvent key) {
-	}
-
-	@Override
-	public void keyPressed(KeyEvent key) {
-		KeyHandler.keySet(key.getKeyCode(), true);
-	}
-
-	@Override
-	public void keyReleased(KeyEvent key) {
-		KeyHandler.keySet(key.getKeyCode(), false);
 	}
 }

@@ -3,67 +3,54 @@ package GameState;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
 
-import Main.GamePanel;
 import TileMap.Background;
+import content.KeyHandler;
 
-public class DeadScreen extends GameState{
+public class DeadScreen extends GameState {
 
-	private Background bg;
-	
-	private Color clr = new Color(0.5f,0,0);
-	private String endScreenTitle = "You Could Not Save The Forest ... ";
-	private Font fnt = new Font("Century Gothic",Font.PLAIN, 20);
-	
+	private final Background bg;
+
+	private final Color clr = new Color(0.5f, 0, 0);
+	private final String endScreenTitle = "You Could Not Save The Forest ... ";
+	private final Font fnt = new Font("Century Gothic", Font.PLAIN, 20);
+
 	public DeadScreen(GameStateManager gsm) {
 
 		this.gsm = gsm;
 
-		try {
-
-			bg = new Background("/BackGround/death.png", 1, false, 0);
-			bg.setVector(-0.1, 0);
-
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	@Override
-	public void init() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void update() {
+		bg = new Background("/BackGround/death.png", 1, true, 0);
 
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		
+
 		bg.draw(g);
-		
+
+		g.setColor(Color.DARK_GRAY);
+		g.setFont(fnt);
+		g.drawString(endScreenTitle, 14, 54);
+
+		g.setColor(Color.BLACK);
+		g.setFont(fnt);
+		g.drawString(endScreenTitle, 12, 52);
+
 		g.setColor(clr);
 		g.setFont(fnt);
-		g.drawString(endScreenTitle,GamePanel.WIDTH/2 , GamePanel.HEIGHT/3);
+		g.drawString(endScreenTitle, 10, 50);
+
 	}
 
-//	@Override
-//	public void keyPressed(int k) {
-//
-//		if(k == KeyEvent.VK_ENTER){
-//			gsm.setState(GameStateManager.MENUSTATE);
-//		}
-//	}
-//
-//	@Override
-//	public void keyReleased(int k) {
-//
-//	}
+	@Override
+	public void init() {
+	}
 
+	@Override
+	public void update() {
+		if (KeyHandler.isPressed(KeyHandler.DOWN))
+			gsm.setState(GameStateManager.MENUSTATE);
+
+		bg.update();
+	}
 }
