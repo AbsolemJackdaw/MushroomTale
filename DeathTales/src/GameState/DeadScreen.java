@@ -53,17 +53,17 @@ public class DeadScreen extends GameState{
 		g.drawString(endScreenTitle,GamePanel.WIDTH/2 , GamePanel.HEIGHT/3);
 	}
 
-	@Override
-	public void keyPressed(int k) {
-
-		if(k == KeyEvent.VK_ENTER){
-			gsm.setState(GameStateManager.MENUSTATE);
-		}
-	}
-
-	@Override
-	public void keyReleased(int k) {
-
-	}
+//	@Override
+//	public void keyPressed(int k) {
+//
+//		if(k == KeyEvent.VK_ENTER){
+//			gsm.setState(GameStateManager.MENUSTATE);
+//		}
+//	}
+//
+//	@Override
+//	public void keyReleased(int k) {
+//
+//	}
 
 }

@@ -31,12 +31,17 @@ public class Level1State extends WorldState {
 		pu = new Point[] { new Point(1480 , 200) };
 
 		c = new Point[] { new Point( 200, 200) } ;
+		
+		populateMap();
+//		Music.load("/Music/track_1.mp3", "BackgroundMusic");
+//		Music.play("BackgroundMusic");
 
 	}
 
 	@Override
 	public void init() {
 		super.init();
+	
 	}
 
 	@Override
@@ -86,8 +91,8 @@ public class Level1State extends WorldState {
 				crd = new GameCards(tileMap, 0);
 				crd.setPosition(c[i].x, c[i].y);
 				cards.add(crd);
-
 			}
+
 	}
 
 	@Override

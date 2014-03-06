@@ -2,12 +2,10 @@ package Entity.enemies;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import Entity.Animation;
 import Entity.Enemy;
+import content.Images;
 
 
 public class Explosion {
@@ -38,22 +36,7 @@ public class Explosion {
 		width = 30;
 		height = 30;
 
-		BufferedImage spritesheet;
-		try {
-			spritesheet = ImageIO.read(getClass().getResourceAsStream("/enemy/enemy_Death.png"));
-			imgs = new BufferedImage[10];
-
-			for(int i = 0; i < imgs.length; i++){
-				imgs[i] = spritesheet.getSubimage(
-						i*width,
-						0,
-						width,
-						height						
-						);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();	
-		}
+		imgs = Images.Explosion;
 
 		animation = new Animation();
 		animation.setFrames(imgs);

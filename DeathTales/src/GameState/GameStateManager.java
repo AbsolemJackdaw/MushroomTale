@@ -1,56 +1,79 @@
 package GameState;
 
-import java.util.ArrayList;
+import content.Music;
+
 
 public class GameStateManager {
-	
-	private ArrayList<GameState> gameStates;
+
+	private GameState[] gameStates;
 	private int currentState;
-	
+
 	public static final int DEATH = 0;
 	public static final int MENUSTATE = 1;
 	public static final int LEVEL1STATE = 2;
 	public static final int LEVEL2STATE = 3;
 	public static final int LEVEL3STATE = 4;
 
-	public final int maxLevels = 4;
+	public final int maxLevels = 5;
 
 	public GameStateManager() {
+
+		Music.init();
 		
-		gameStates = new ArrayList<GameState>();
-		
+		gameStates = new GameState[maxLevels];
+
 		currentState = MENUSTATE;
-		gameStates.add(new DeadScreen(this));
-		gameStates.add(new MenuState(this));
-		gameStates.add(new Level1State(this));
-		gameStates.add(new Level2State(this));
-		gameStates.add(new Level3State(this));
+		loadState(currentState);
 
 	}
-	
+
+	private void loadState(int state) {
+		if(state == MENUSTATE)
+			gameStates[state] = new MenuState(this);
+		else if(state == LEVEL1STATE)
+			gameStates[state] = new Level1State(this);
+		else if(state == LEVEL2STATE)
+			gameStates[state] = new Level2State(this);
+		else if(state == LEVEL3STATE)
+			gameStates[state] = new Level3State(this);
+	}
+
+	private void unloadState(int state) {
+		gameStates[state] = null;
+	}
+
 	public void setState(int state) {
+		unloadState(currentState);
 		currentState = state;
-		gameStates.get(currentState).init();
-	}
-	
+		loadState(currentState);
+	}	
+
 	public int getCurrentState(){return currentState;}
-	
+
 	public void update() {
-		gameStates.get(currentState).update();
+		try {
+			gameStates[currentState].update();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	public void draw(java.awt.Graphics2D g) {
-		gameStates.get(currentState).draw(g);
+		try {
+			gameStates[currentState].draw(g);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
-	public void keyPressed(int k) {
-		gameStates.get(currentState).keyPressed(k);
-	}
-	
-	public void keyReleased(int k) {
-		gameStates.get(currentState).keyReleased(k);
-	}
-	
+
+//	public void keyPressed(int k) {
+//		gameStates[currentState].keyPressed(k);
+//	}
+//
+//	public void keyReleased(int k) {
+//		gameStates[currentState].keyReleased(k);
+//	}
+
 }
 
 

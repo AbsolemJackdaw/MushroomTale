@@ -2,13 +2,11 @@ package Entity.objects;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import Entity.Animation;
 import Entity.MapObject;
 import TileMap.TileMap;
+import content.Images;
 
 public class Hearts extends MapObject{
 
@@ -29,19 +27,9 @@ public class Hearts extends MapObject{
 		fallSpeed = 0.5;
 		maxFallSpeed = 10.0;
 		
-		image = new BufferedImage[1];
+		image = Images.Heart;
 		
 		animation = new Animation();
-		try {
-			BufferedImage img = ImageIO.read(getClass().getResource("/player/hud.png"));
-			for(int i = 0; i < image.length; i++){
-				image[i] = img.getSubimage(i*width, 0, width, height);
-			}
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		animation.setFrames(image);
 		animation.setDelay(0);
 	}

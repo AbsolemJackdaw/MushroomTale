@@ -23,6 +23,7 @@ import Entity.player.PlayerAttributes;
 import Main.GamePanel;
 import TileMap.Background;
 import TileMap.TileMap;
+import content.KeyHandler;
 
 public class WorldState extends GameState {
 
@@ -44,7 +45,7 @@ public class WorldState extends GameState {
 	private Lore gamestory;
 	private BufferedImage guiLore;
 
-	private boolean drawBoxes;
+	//	private boolean drawBoxes;
 
 	public WorldState(GameStateManager gsm) {
 		this.gsm = gsm;
@@ -52,6 +53,9 @@ public class WorldState extends GameState {
 	}
 
 	public void init() {
+		
+		System.out.println(" init");
+		
 		gamestory = new Lore();
 		loreToDisplay = new String[]{};
 		explosion = new ArrayList<Explosion>();
@@ -60,6 +64,8 @@ public class WorldState extends GameState {
 		background = new ArrayList<Background>();
 		exp = new ArrayList<PowerUp>();
 		cards = new ArrayList<GameCards>();
+
+		populateMap();
 
 		//load background after background is initialized
 		loadBackgrounds();
@@ -77,7 +83,6 @@ public class WorldState extends GameState {
 
 		setPlayerPosition();
 
-		populateMap();
 
 		try {
 			guiLore = ImageIO.read(getClass().getResourceAsStream("/player/cardGui.png"));
@@ -114,10 +119,13 @@ public class WorldState extends GameState {
 	 * This method HAS TO BE Overwritten, or else you wont have any mobs.
 	 * */
 	public void populateMap() {
-
+		System.out.println("Filled map");
 	}
 
 	public void update() {
+
+		// check keys
+		handleInput();
 
 		//update player. requiered for all maps
 		player.update();
@@ -207,6 +215,8 @@ public class WorldState extends GameState {
 				dropLoot(e);
 			}
 		}
+		
+		System.out.println(enemies);
 	}
 
 	private void readCard() {
@@ -289,7 +299,6 @@ public class WorldState extends GameState {
 		if(loreToDisplay.length > 0){
 			displayLoreGui(g);
 		}
-
 	}
 
 
@@ -298,11 +307,11 @@ public class WorldState extends GameState {
 		g.drawImage(guiLore, 0, 0, null);
 
 		for(int c = 0; c < loreToDisplay.length; c++){				
-			g.setColor(Color.DARK_GRAY);
-			g.setFont(new Font("Arial", Font.PLAIN, 10));
-			g.drawString(loreToDisplay[c], 50 + 1, 45+10+(c*10)+1);
+			//			g.setColor(Color.DARK_GRAY);
+			//			g.setFont(new Font("Arial", Font.PLAIN, 10));
+			//			g.drawString(loreToDisplay[c], 50 + 1, 45+10+(c*10)+1);
 
-			g.setColor(Color.WHITE);
+			g.setColor(new Color(0.2f , 0.2f , 0.3f));
 			g.setFont(new Font("Arial", Font.PLAIN, 10));
 			g.drawString(loreToDisplay[c], 50, 45+10+(c*10));
 
@@ -331,53 +340,63 @@ public class WorldState extends GameState {
 		}
 	}
 
-	public void keyReleased(int k) {
 
-		if(k == KeyEvent.VK_LEFT)
-			player.setLeft(false);
-		if(k == KeyEvent.VK_RIGHT)
-			player.setRight(false);
-		if(k == KeyEvent.VK_UP)	{	
-			player.setUp(false);
-			player.setJumping(false);
-		}
-		if(k == KeyEvent.VK_DOWN)
-			player.setDown(false);
-
-		if(k == KeyEvent.VK_SPACE && !isDisplayingLore)
-			player.setAttacking();
-
-		if(k == KeyEvent.VK_ENTER){
-			loreToDisplay = new String[]{};
-			isDisplayingLore = false;
-		}
-
-		if(k == KeyEvent.VK_B){
-			drawBoxes = drawBoxes ? false : true;
-		}
-
-		//		if(k == KeyEvent.VK_G){
-		//			if(gsm.getCurrentState() < gsm.maxLevels)
-		//				gsm.setState(gsm.getCurrentState()+1);
-		//
-		//			System.out.println("changed to " + gsm.getCurrentState());
-		//		}
-		//
-		//		if(k == KeyEvent.VK_H)
-		//			player.damagePlayer(1);
-		//
-		//		if(k == KeyEvent.VK_A)
-		//			player.damagePlayer(-1);
-		//
-		//		if(k == KeyEvent.VK_E)
-		//			System.out.println(player.getExp());
-		//
-		//		if(k == KeyEvent.VK_Y)
-		//			player.setStaches(player.getExp() +1);
-		//
-		//		if(k == KeyEvent.VK_U)
-		//			player.setExpStub(player.getExpStub() +1);
+	public void handleInput() {
+//		if(KeyHandler.isPressed(KeyHandler.ESCAPE)) gsm.setPaused(true);
+		if( player.getHealth() == 0) return;
+		player.setLeft(KeyHandler.keyState[KeyHandler.LEFT]);
+		player.setRight(KeyHandler.keyState[KeyHandler.RIGHT]);
+		player.setJumping(KeyHandler.keyState[KeyHandler.UP]);
+		if(KeyHandler.isPressed(KeyHandler.SPACE)) player.setAttacking();
 	}
+
+	//	public void keyReleased(int k) {
+	//
+	//		if(k == KeyEvent.VK_LEFT)
+	//			player.setLeft(false);
+	//		if(k == KeyEvent.VK_RIGHT)
+	//			player.setRight(false);
+	//		if(k == KeyEvent.VK_UP)	{	
+	//			player.setUp(false);
+	//			player.setJumping(false);
+	//		}
+	//		if(k == KeyEvent.VK_DOWN)
+	//			player.setDown(false);
+	//
+	//		if(k == KeyEvent.VK_SPACE && !isDisplayingLore)
+	//			player.setAttacking();
+	//
+	//		if(k == KeyEvent.VK_ENTER){
+	//			loreToDisplay = new String[]{};
+	//			isDisplayingLore = false;
+	//		}
+	//
+	//		//		if(k == KeyEvent.VK_B){
+	//		//			drawBoxes = drawBoxes ? false : true;
+	//		//		}
+	//
+	//		if(k == KeyEvent.VK_G){
+	//			if(gsm.getCurrentState() < gsm.maxLevels)
+	//				gsm.setState(gsm.getCurrentState()+1);
+	//
+	//			System.out.println("changed to " + gsm.getCurrentState());
+	//		}
+	//
+	//		if(k == KeyEvent.VK_H)
+	//			player.damagePlayer(1);
+	//
+	//		if(k == KeyEvent.VK_A)
+	//			player.damagePlayer(-1);
+	//
+	//		if(k == KeyEvent.VK_E)
+	//			System.out.println(player.getExp());
+	//
+	//		if(k == KeyEvent.VK_Y)
+	//			player.setStaches(player.getExp() +1);
+	//
+	//		if(k == KeyEvent.VK_U)
+	//			player.setExpStub(player.getExpStub() +1);
+	//	}
 }
 
 

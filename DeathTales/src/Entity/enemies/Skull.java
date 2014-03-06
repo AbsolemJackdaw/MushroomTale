@@ -3,7 +3,7 @@ package Entity.enemies;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
+import content.Images;
 
 import Entity.Animation;
 import Entity.Enemy;
@@ -29,20 +29,7 @@ public class Skull extends Enemy {
 
 		isFlightEnabled = true;
 
-		// load sprites
-		try {
-
-			BufferedImage spritesheet = ImageIO.read(getClass()
-					.getResourceAsStream("/enemy/enemies.png"));
-
-			sprites = new BufferedImage[8];
-
-			for (int i = 0; i < sprites.length; i++)
-				sprites[i] = spritesheet.getSubimage(i * width, 30, width,
-						height);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		sprites = Images.Skull;
 
 		animation = new Animation();
 		animation.setFrames(sprites);

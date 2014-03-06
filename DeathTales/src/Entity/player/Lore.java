@@ -8,10 +8,10 @@ public class Lore {
 
 	//beginning
 	private static final String[] cart1 = {
-		"What happened to my forest ? Everything got ",
-		" dread and wasted... The lively, green",
-		"forest I used to know has turned to a bloody",
-		"wasteland ! I need to find out what's going on.",
+		"Yesterday, the forest was lively, green.",
+		"Today everything is pulsating, infected, dead.",
+		"",
+		"What happened after I left ... ?",
 		"",
 		"",
 		"",
@@ -28,12 +28,10 @@ public class Lore {
 	//end level 1
 	private static final String[] cart2 = {
 		"I have never seen such creatures in the forest!",
-		"Why are dead, twiching, walking karkasses",
-		"roaming the forest ?! Luckily my Mushroom ",
-		"Digestion allows me to consume the dead.",
-		"The soil is strangely pulsating though...",
+		"Dead karkasses roam my once fertile soil...",
+		"The ground is pulsating softly and breaths.",
 		"Something infected my forest and its feeding ",
-		"itself on it.",
+		"itself on it...",
 		"",
 		"",
 		"",
@@ -41,7 +39,9 @@ public class Lore {
 		"",
 		"",
 		"",
-		"Press enter to continue."
+		"",
+		"",
+		"*Press enter to continue.*"
 	};
 
 

@@ -3,11 +3,10 @@ package Entity.enemies;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
-
 import Entity.Animation;
 import Entity.Enemy;
 import TileMap.TileMap;
+import content.Images;
 
 public class Demon extends Enemy{
 
@@ -28,24 +27,7 @@ public class Demon extends Enemy{
 		cheight = 20;
 		//load sprites
 
-		try {
-
-			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/enemy/enemies.png"));
-
-			sprites = new BufferedImage[8];
-
-			for(int i = 0; i < sprites.length; i++){
-				sprites[i] = spritesheet.getSubimage(
-						i*width,
-						0,
-						width,
-						height						
-						);
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
+		sprites = Images.Demon;
 
 		animation = new Animation();
 		animation.setFrames(sprites);

@@ -93,7 +93,7 @@ public class Level3State extends WorldState {
 				exp.add(stache);
 			}
 
-		crd = new GameCards(tileMap, 1);
+		crd = new GameCards(tileMap, 2);
 		crd.setPosition(200, 150);
 		cards.add(crd);
 	}

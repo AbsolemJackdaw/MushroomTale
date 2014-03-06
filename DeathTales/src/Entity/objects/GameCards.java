@@ -2,9 +2,8 @@ package Entity.objects;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
+import content.Images;
 
 import Entity.Animation;
 import Entity.MapObject;
@@ -31,21 +30,11 @@ public class GameCards extends MapObject {
 		fallSpeed = 0.5;
 		maxFallSpeed = 10.0;
 
-		image = new BufferedImage[24];
+		image = Images.Cards;
 
 		facingRight = true;
 
-		animation = new Animation();
-		try {
-			BufferedImage img = ImageIO.read(getClass().getResource("/items/lorecard.png"));
-			for(int i = 0; i < image.length; i++){
-				image[i] = img.getSubimage(i*width, 0, width, height);
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		animation = new Animation();		
 		animation.setFrames(image);
 		animation.setDelay(75);
 	}
