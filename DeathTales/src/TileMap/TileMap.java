@@ -10,6 +10,8 @@ import javax.imageio.ImageIO;
 
 import GameState.Level1State;
 import GameState.Level2State;
+import GameState.Level3State;
+import GameState.Level4State;
 import GameState.WorldState;
 import Main.GamePanel;
 
@@ -58,16 +60,25 @@ public class TileMap {
 
 		if (w instanceof Level1State)
 			if ((x == 68) && (y == 4)) {
-				System.out.println("Yoops, next level .3.");
+				System.out.println("Yoops, next level .3. : 1");
 				return true;
 			}
 
 		if (w instanceof Level2State)
 			if ((x == 99) && (y == 6)) {
-				System.out.println("Yoops, next level .3.");
+				System.out.println("Yoops, next level .3. : 2");
 				return true;
 			}
 
+		if (w instanceof Level3State)
+			if (((x == 147) && (y == 21)) || ((x == 148) && (y == 21))) {
+				System.out.println("Yoops, next level .3. : 3");
+				return true;
+			}
+
+		if (w instanceof Level4State)
+			if (((x == 3) && (y == 48)) || ((x == 3) && (y == 47)))
+				return true;
 		return false;
 	}
 

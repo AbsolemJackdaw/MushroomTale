@@ -16,13 +16,13 @@ import Entity.objects.GameCards;
 import Entity.objects.Hearts;
 import Entity.objects.PowerUp;
 import Entity.player.HUD;
-import Entity.player.Lore;
 import Entity.player.Player;
 import Entity.player.PlayerAttributes;
 import Main.GamePanel;
 import TileMap.Background;
 import TileMap.TileMap;
 import content.KeyHandler;
+import content.Lore;
 
 public class WorldState extends GameState {
 
@@ -40,9 +40,11 @@ public class WorldState extends GameState {
 	protected ArrayList<Background> background;
 
 	private String[] loreToDisplay;
-	private boolean isDisplayingLore;
+	public boolean isDisplayingLore;
 	private Lore gamestory;
 	private BufferedImage guiLore;
+
+	private boolean startTimer = false;
 
 	// private boolean drawBoxes;
 
@@ -60,7 +62,7 @@ public class WorldState extends GameState {
 	}
 
 	/** Display a gui when reading lore */
-	private void displayLoreGui(Graphics2D g) {
+	public void displayLoreGui(Graphics2D g) {
 		g.drawImage(guiLore, 0, 0, null);
 
 		for (int c = 0; c < loreToDisplay.length; c++) {
@@ -144,6 +146,14 @@ public class WorldState extends GameState {
 		player.setJumping(KeyHandler.keyState[KeyHandler.UP]);
 		if (KeyHandler.isPressed(KeyHandler.SPACE))
 			player.setAttacking();
+
+		if (KeyHandler.isPressed(KeyHandler.G))
+			gsm.setState(gsm.getCurrentState() + 1);
+
+		if (KeyHandler.isPressed(KeyHandler.U)) {
+			player.setExpStub(player.getExpStub() + 1);
+			player.setStaches(player.getExp() + 1);
+		}
 	}
 
 	@Override
@@ -182,7 +192,6 @@ public class WorldState extends GameState {
 			guiLore = ImageIO.read(getClass().getResourceAsStream(
 					"/player/cardGui.png"));
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("Failed to load Lore Gui");
 		}
@@ -238,22 +247,35 @@ public class WorldState extends GameState {
 	@Override
 	public void update() {
 
+		// startTimer = true;
+
 		// check keys
 		if (!isDisplayingLore)
 			handleInput();
-		else if (KeyHandler.isPressed(KeyHandler.ENTER))
+		else if (KeyHandler.isPressed(KeyHandler.ENTER)) {
 			isDisplayingLore = false;
-		else
+			if (player.getWorld() instanceof Level5State)
+				startTimer = true;
+
+		} else
 			reInitKeys();
 
 		// update player. requiered for all maps
 		player.update();
 
+		// if(startTimer && !player.isDead()){
+		// player.damagePlayer(1);
+		// }
+
 		// popping up death screen
-		if (player.isDead()) {
-			player = new Player(tileMap);
-			gsm.setState(GameStateManager.DEATH);
-		}
+		if (player.isDead())
+			if (startTimer)
+				gsm.setState(gsm.getCurrentState() + 1);
+			else {
+				init();
+				// TODO needs a proper reset button
+				gsm.setState(GameStateManager.DEATH);
+			}
 
 		tileMap.setPosition((GamePanel.WIDTH / 2) - player.getx(),
 				(GamePanel.HEIGHT / 2) - player.gety());
@@ -311,7 +333,6 @@ public class WorldState extends GameState {
 
 			final Enemy e = enemies.get(i);
 			e.update();
-			// e.setWorld(this);
 			if (e.isDead()) {
 				enemies.remove(i);
 				i--;
@@ -328,6 +349,12 @@ public class WorldState extends GameState {
 				explosion.remove(i);
 				dropLoot(e);
 			}
+		}
+
+		if (startTimer) {
+			player.damagePlayer(1);
+
+			System.out.println("");
 		}
 
 	}

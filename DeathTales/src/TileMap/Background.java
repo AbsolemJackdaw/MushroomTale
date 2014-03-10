@@ -13,7 +13,7 @@ public class Background {
 
 	private double x;
 	private double y;
-	
+
 	@SuppressWarnings("unused")
 	private double dx;
 	private double dy;

@@ -8,13 +8,17 @@ public class GameStateManager {
 	private final GameState[] gameStates;
 	private int currentState;
 
-	public static final int NUMGAMESTATES = 6;
+	public static final int NUMGAMESTATES = 9;
+
 	public static final int DEATH = 0;
 	public static final int MENUSTATE = 1;
 	public static final int HELP = 2;
 	public static final int LEVEL1STATE = 3;
 	public static final int LEVEL2STATE = 4;
 	public static final int LEVEL3STATE = 5;
+	public static final int LEVEL4STATE = 6;
+	public static final int LEVEL5STATE = 7;
+	public static final int STUB = 8;
 
 	public GameStateManager() {
 
@@ -49,10 +53,16 @@ public class GameStateManager {
 			gameStates[state] = new Level2State(this);
 		else if (state == LEVEL3STATE)
 			gameStates[state] = new Level3State(this);
+		else if (state == LEVEL4STATE)
+			gameStates[state] = new Level4State(this);
+		else if (state == LEVEL5STATE)
+			gameStates[state] = new Level5State(this);
 		else if (state == HELP)
 			gameStates[state] = new HelpState(this);
 		else if (state == DEATH)
 			gameStates[state] = new DeadScreen(this);
+		else if (state == STUB)
+			gameStates[state] = new LevelEND(this);
 	}
 
 	public void setState(int state) {

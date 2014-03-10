@@ -14,6 +14,8 @@ public class KeyHandler {
 	public static int SPACE = 3;
 	public static int ENTER = 4;
 	public static int DOWN = 5;
+	public static int G = 6;
+	public static int U = 7;
 
 	public static boolean anyKeyPress() {
 		for (int i = 0; i < NUM_KEYS; i++)
@@ -39,6 +41,11 @@ public class KeyHandler {
 			keyState[ENTER] = b;
 		else if (i == KeyEvent.VK_DOWN)
 			keyState[DOWN] = b;
+
+		else if (i == KeyEvent.VK_G)
+			keyState[G] = b;
+		else if (i == KeyEvent.VK_U)
+			keyState[U] = b;
 
 	}
 

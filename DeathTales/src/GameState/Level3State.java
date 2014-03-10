@@ -2,14 +2,13 @@ package GameState;
 
 import java.awt.Point;
 
-import content.Music;
-
 import Entity.enemies.Demon;
 import Entity.enemies.Skull;
 import Entity.objects.GameCards;
 import Entity.objects.Hearts;
 import Entity.objects.PowerUp;
 import TileMap.Background;
+import content.Music;
 
 public class Level3State extends WorldState {
 
@@ -42,7 +41,7 @@ public class Level3State extends WorldState {
 		hp = new Point[] { new Point(1600, 400) };
 
 		pu = new Point[] { new Point(2200, 300), new Point(1540, 400) };
-		
+
 		populateMap();
 		Music.stop("BackgroundMusic");
 		Music.load("/Music/track_2.mp3", "musicLvL3");

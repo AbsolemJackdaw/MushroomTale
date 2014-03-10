@@ -15,6 +15,7 @@ public class Level2State extends WorldState {
 	private final Point[] dms;
 	private final Point[] hp;
 	private final Point[] pu;
+	private boolean check = false;
 
 	Demon demon;
 	Hearts hrt;
@@ -33,9 +34,8 @@ public class Level2State extends WorldState {
 		hp = new Point[] { new Point(760, 50), new Point(1350, 170) };
 
 		pu = new Point[] { new Point(1000, 50) };
-
+		check = true;
 		populateMap();
-
 	}
 
 	@Override
@@ -78,10 +78,11 @@ public class Level2State extends WorldState {
 				stache.setPosition(element.x, element.y);
 				exp.add(stache);
 			}
-
-		crd = new GameCards(tileMap, 1);
-		crd.setPosition(200, 150);
-		cards.add(crd);
+		if (check) {
+			crd = new GameCards(tileMap, 1);
+			crd.setPosition(200, 150);
+			cards.add(crd);
+		}
 	}
 
 	@Override
